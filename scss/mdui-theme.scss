@@ -1,0 +1,6 @@
+// fix 默认不显示侧边栏时，屏幕仍旧有侧边
+.mdui-drawer-body-left {
+    @media (min-width: 1024px) {
+        padding-left: 0;
+    }
+}
