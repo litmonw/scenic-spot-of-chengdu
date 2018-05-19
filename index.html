@@ -11,17 +11,17 @@
     <link rel="stylesheet" href="css/main.css">
 </head>
 
-<body class="mdui-drawer-body-left mdui-theme-primary-indigo mdui-appbar-with-toolbar">
+<body class="mdui-drawer-body-left mdui-theme-primary-indigo mdui-appbar-with-toolbar mdui-loaded">
     <header class="mdui-appbar mdui-appbar-fixed">
         <div class="mdui-toolbar mdui-color-theme">
-            <span class="mdui-btn mdui-btn-icon" mdui-drawer="{target: '#left-drawer'}">
+            <span class="mdui-btn mdui-btn-icon" mdui-drawer="{target: '#left-drawer'}" data-bind="click: switchToggle">
                 <i class="mdui-icon material-icons">menu</i>
             </span>
-            <span class="mdui-typo-title">成都热门景点</span>
+            <span class="mdui-typo-title" data-bind="text: isToggled">成都热门景点</span>
         </div>
     </header>
 
-    <div class="mdui-drawer mdui-drawer-close mdui-color-white" id="left-drawer">
+    <div data-bind="css: {'mdui-drawer-close': isToggled}" class="mdui-drawer mdui-color-white" id="left-drawer">
         <ul class="mdui-list">
             <li class="mdui-list-item mdui-ripple">成都大熊猫繁育研究基地</li>
             <li class="mdui-list-item mdui-ripple">都江堰景区</li>
@@ -43,6 +43,21 @@
     <script src="js/mdui.js"></script>
     <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.4.6&key=9a82c09101b7b00e690cd03b7bbcb2db"></script>
     <script>
+        // konckout 数据绑定
+        let viewModel = {
+            isToggled: ko.observable(0),
+            switchToggle: function () {
+                if (this.isToggled() === true) {
+                    return this.isToggled(false);
+                }
+
+                return this.isToggled(true);
+            }
+        };
+
+        ko.applyBindings(viewModel);
+
+        // 地图 api
         const map = new AMap.Map('container', {
             resizeEnable: true,
             zoom: 10,
