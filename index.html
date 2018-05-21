@@ -17,17 +17,17 @@
             <span class="mdui-btn mdui-btn-icon" data-bind="click: switchToggle">
                 <i class="mdui-icon material-icons">menu</i>
             </span>
-            <span class="mdui-typo-title">成都热门景点</span>
+            <span data-bind="text: filterWord" class="mdui-typo-title">成都热门景点</span>
         </div>
     </header>
         <div data-bind="css: {'mdui-drawer-close': isToggled}" class="mdui-drawer mdui-color-white" id="left-drawer">
             <div class="mdui-container">
                 <div class="mdui-textfield">
-                    <input class="mdui-textfield-input" type="text" placeholder="筛选景点" />
+                    <input data-bind="value: filterWord, valueUpdate: 'keyup', event: {keyup: filterScenic}" class="mdui-textfield-input" type="text" placeholder="筛选景点" />
                 </div>
             </div>
             <ul data-bind="foreach: scenicList" class="mdui-list">
-                <li data-bind="text: name" class="mdui-list-item mdui-ripple"></li>
+                <li data-bind="text: name, visible: visible" class="mdui-list-item mdui-ripple"></li>
             </ul>
         </div>
         <div class="mdui-container-fluid" id="container"></div>
@@ -38,12 +38,6 @@
     <!-- <script src="js/mdui.js"></script> -->
     <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.4.6&key=9a82c09101b7b00e690cd03b7bbcb2db"></script>
     <script>
-        // konckout 数据绑定
-        // let toggleViewModel = {
-            
-        // };
-
-        // ko.applyBindings(toggleViewModel);
 
         // 地图 api
         const map = new AMap.Map('container', {
@@ -69,6 +63,7 @@
         let Scenic = function (scenic) {
             this.name = ko.observable(scenic.name);
             this.position = ko.observable(scenic.position);
+            this.visible = ko.observable(true);
         }
 
         // for (let i = 0; i < markers.length; i++) {
@@ -105,12 +100,39 @@
                 
             }
 
+            // 初始化 高德地图 信息窗体
             let infoWindow = new AMap.InfoWindow();
 
             function markerClick(e) {
                 console.log(e);
                 infoWindow.setContent(e.target.content);
                 infoWindow.open(map, e.target.getPosition());
+            }
+
+            //存储搜索对应的标记
+            self.show = ko.observableArray();
+            
+            // 输入过滤字段功能
+            self.filterWord = ko.observable('');
+
+            // 搜索函数功能
+            self.filterScenic = function () {
+                var filterWord = self.filterWord();
+                // removeAll() knockout 内置方法
+                self.show.removeAll();
+
+                self.scenicList().forEach(function (scenic) {
+                    scenic.marker.hide();
+                    scenic.visible(false);
+                    if (scenic.name().indexOf(filterWord) !== -1) {
+                        self.show.push(scenic);
+                        scenic.visible(true);
+                    }
+                });
+
+                self.show().forEach(function (scenic) {
+                    scenic.marker.show();
+                });
             }
 
             // 抽屉栏折叠功能
