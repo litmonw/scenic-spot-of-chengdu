@@ -1,16 +1,16 @@
 const markers = [
     {name: '成都大熊猫繁育研究基地', position: [104.14469, 30.737297] },
-    // {name: '都江堰景区', position: [103.608743, 31.001635]},
-    // {name: '锦里', position: [104.048721, 30.644285]},
-    // {name: '宽窄巷子', position: [104.053647, 30.663823]},
-    // {name: '春熙路', position: [104.077758, 30.65552]},
-    // {name: '青城山', position: [103.562887, 30.905374]},
-    // {name: '紫颐香薰山谷', position: [104.174772, 30.436418]},
-    // {name: '文殊院', position: [104.072534, 30.675325]},
-    // {name: '杜甫草堂', position: [104.072534, 30.675325]},
-    // {name: '西岭雪山', position: [103.173787, 30.615003]},
-    // {name: '金沙遗址博物馆', position: [104.012659, 30.681726]},
-    // {name: '成都海昌极地海洋公园', position: [104.073406, 30.49423]}
+    {name: '都江堰景区', position: [103.608743, 31.001635]},
+    {name: '锦里', position: [104.048721, 30.644285]},
+    {name: '宽窄巷子', position: [104.053647, 30.663823]},
+    {name: '春熙路', position: [104.077758, 30.65552]},
+    {name: '青城山', position: [103.562887, 30.905374]},
+    {name: '紫颐香薰山谷', position: [104.174772, 30.436418]},
+    {name: '文殊院', position: [104.072534, 30.675325]},
+    {name: '杜甫草堂', position: [104.072534, 30.675325]},
+    {name: '西岭雪山', position: [103.173787, 30.615003]},
+    {name: '金沙遗址博物馆', position: [104.012659, 30.681726]},
+    {name: '成都海昌极地海洋公园', position: [104.073406, 30.49423]}
 ]
 
 // 初始化
@@ -86,6 +86,7 @@ let MapViewModel = function (data) {
                 map.setCenter(scenic.marker.getPosition());
             });
         }).catch(function () {
+            // 错误时反馈功能
             AMap.event.addListener(scenic.marker, 'click', function () {
                 let info = [];
                 info.push("<h2>" + scenic.name() + "</h2>");
@@ -123,6 +124,7 @@ let MapViewModel = function (data) {
         // removeAll() knockout 内置方法
         self.show.removeAll();
 
+        // 移除筛选过滤掉的景点
         self.scenicList().forEach(function (scenic) {
             scenic.marker.hide();
             scenic.visible(false);
@@ -132,7 +134,6 @@ let MapViewModel = function (data) {
             }
         });
 
-        // 
         self.show().forEach(function (scenic) {
             scenic.marker.show();
         });
@@ -142,6 +143,7 @@ let MapViewModel = function (data) {
     self.isToggled = ko.observable(true);
     self.isFalseToggled = ko.observable(false);
 
+    // 切换抽屉栏的显示与隐藏
     self.switchToggle = function () {
         if (self.isToggled() === true) {
             self.isToggled(false);
