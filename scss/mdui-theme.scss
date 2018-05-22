@@ -4,3 +4,34 @@
         padding-left: 0;
     }
 }
+
+@media (max-width: 1023px) {
+    .mdui-drawer {
+        transform: translateX(0);
+    }
+
+    .mdui-appbar-with-toolbar .mdui-drawer {
+        top: 64px;
+    }
+
+    .mdui-drawer {
+        width: 240px;
+        max-width: none;
+    }
+}
+
+@media (max-width: 600px) {
+    .mdui-appbar-with-toolbar .mdui-drawer {
+        top: 56px;
+    }
+}
+
+@media (min-width: 600px) {
+    .mdui-drawer-close {
+        transform: translateX(-250px);
+    }
+}
+
+.mdui-drawer-close {
+    transform: translateX(-250px);
+}
